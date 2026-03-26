@@ -27,6 +27,9 @@ content="Supprimez les filigranes Gemini AI mathématiquement — précision au 
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css" />
 
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
     <!-- Styles critiques pour le rendu initial -->
     <style>
         body {
@@ -45,28 +48,18 @@ content="Supprimez les filigranes Gemini AI mathématiquement — précision au 
     <nav>
         <a href="#" class="logo" onclick="resetApp(); return false;">
             <div class="logo-mark">
-                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path
-                        d="M12 5c.67 0 1.35.09 2 .26 1.78-2 5.03-2.84 6.42-2.26 1.4.58-.42 7-.42 7 .57 1.07 1 2.24 1 3.44C21 17.9 16.97 21 12 21s-9-3-9-7.56c0-1.25.5-2.4 1-3.44 0 0-1.89-6.42-.5-7 1.39-.58 4.72.23 6.5 2.23A9.04 9.04 0 0 1 12 5Z" />
-                    <path d="M8 14v.5" />
-                    <path d="M16 14v.5" />
-                    <path d="M11.25 16.25h1.5L12 17l-.75-.75Z" />
-                </svg>
+                <i data-lucide="droplet" color="white" size="18"></i>
             </div>
-Suppresseur de Filigrane IA
-</a>
-        <div class="nav-links">
-<a href="#how" class="nav-link">Comment ça marche</a>
-<a href="https://x.com/Dneb237" target="_blank" rel="noopener" class="nav-link">Suivre sur
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"
-                    style="vertical-align:-1px;margin-right:3px">
-                    <path
-                        d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z" />
-                </svg>
+            ClearDrop
+        </a>
+        <div class="nav-links desktop-only">
+            <a href="#how" class="nav-link">Comment ça marche</a>
+            <a href="https://x.com/Dneb237" target="_blank" rel="noopener" class="nav-link nav-icon-link">
+                <i data-lucide="twitter" size="16"></i> Suivre
             </a>
-<a href="https://github.com/noumegniedmond237-sketch" target="_blank" rel="noopener"
-class="nav-link">GitHub ↗</a>
+            <a href="https://github.com/noumegniedmond237-sketch" target="_blank" rel="noopener" class="nav-link nav-icon-link">
+                <i data-lucide="github" size="16"></i> GitHub ↗
+            </a>
         </div>
     </nav>
 
@@ -88,12 +81,7 @@ Supprimez les filigranes Gemini.<br><em>Instantanément. Sans perte de qualité.
         <!-- Carte de téléversement — l'outil EST l'accueil -->
         <div id="upload-area" class="stagger-4" role="button" aria-label="Téléverser des images pour supprimer les filigranes" tabindex="0">
             <div class="drop-icon pulse-bounce">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <polyline points="16 16 12 12 8 16" />
-                    <line x1="12" y1="12" x2="12" y2="21" />
-                    <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
-                </svg>
+                <i data-lucide="upload-cloud" size="32" color="var(--secondary)"></i>
             </div>
             <div class="drop-title">Déposez vos images ici</div>
             <div class="drop-formats">JPG &nbsp;·&nbsp; PNG &nbsp;·&nbsp; WebP &nbsp;·&nbsp; jusqu'à 50 images</div>
@@ -107,21 +95,15 @@ Supprimez les filigranes Gemini.<br><em>Instantanément. Sans perte de qualité.
         <!-- Ligne de confiance -->
         <div class="trust-row stagger-5">
             <div class="trust-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                    <polyline points="20 6 9 17 4 12" />
-                </svg>
+                <i data-lucide="check-circle-2" size="18" color="var(--success)"></i>
                 Variantes 48×48 et 96×96 supportées
             </div>
             <div class="trust-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                    <polyline points="20 6 9 17 4 12" />
-                </svg>
+                <i data-lucide="shield-check" size="18" color="var(--success)"></i>
                 Sans serveur. Sans inscription. Sans limite.
             </div>
             <div class="trust-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                    <polyline points="20 6 9 17 4 12" />
-                </svg>
+                <i data-lucide="package" size="18" color="var(--success)"></i>
                 Exportation ZIP par lots
             </div>
         </div>
@@ -135,38 +117,23 @@ Supprimez les filigranes Gemini.<br><em>Instantanément. Sans perte de qualité.
         style="position:relative;z-index:1;max-width:700px;margin:0 auto;padding:60px 24px 80px;text-align:center">
         <h2 style="font-size:clamp(28px,4vw,44px);font-weight:900;letter-spacing:-2px;margin-bottom:12px">Comment ça marche
         </h2>
-        <p style="font-size:15px;color:var(--text-sec);line-height:1.7;margin-bottom:40px">
-            Gemini appose un logo blanc sur votre image en utilisant <strong>le mélange alpha (alpha blending)</strong> :<br>
-            <code
-                style="font-family:'JetBrains Mono',monospace;font-size:13px;background:rgba(255,255,255,0.05);color:var(--text-pri);padding:4px 10px;border-radius:6px;display:inline-block;margin-top:8px">
-        watermarked = α × logo + (1−α) × original
-      </code>
-            <br><br>
-            Clear AI Watermark inverse cela exactement :<br>
-            <code
-                style="font-family:'JetBrains Mono',monospace;font-size:13px;background:rgba(255,255,255,0.05);color:var(--accent);padding:4px 10px;border-radius:6px;display:inline-block;margin-top:8px">
-        original = (watermarked − α × logo) / (1−α)
-      </code>
-            <br><br>
-            La carte alpha est calculée à partir d'une capture d'arrière-plan pur du logo du filigrane Gemini.
-            Pas d'approximation. Pas d'IA. Que des mathématiques.
-        </p>
+
         <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
             <div class="feature-card jump-on-hover"
                 style="text-align:left;background:var(--card);border-radius:14px;padding:24px;box-shadow:var(--shadow-card);min-width:200px;flex:1;border:1px solid rgba(255,255,255,0.05);transition: transform 0.3s ease;">
-                <div style="font-size:28px;margin-bottom:12px;filter:drop-shadow(0 2px 8px rgba(59,130,246,0.3));">🔍</div>
+                <div style="margin-bottom:12px;color:var(--secondary);filter:drop-shadow(0 2px 8px rgba(6,182,212,0.3));"><i data-lucide="scan-line" size="28"></i></div>
                 <div style="font-weight:700;font-size:15px;margin-bottom:8px;color:var(--text-pri);">Détection adaptative</div>
                 <p style="font-size:13px;color:var(--text-sec);line-height:1.6">Trouve le filigrane avec la corrélation NCC. Arrêt anticipé dès que la confiance est ≥ 90%.</p>
             </div>
             <div class="feature-card jump-on-hover"
                 style="text-align:left;background:var(--card);border-radius:14px;padding:24px;box-shadow:var(--shadow-card);min-width:200px;flex:1;border:1px solid rgba(255,255,255,0.05);transition: transform 0.3s ease;">
-                <div style="font-size:28px;margin-bottom:12px;filter:drop-shadow(0 2px 8px rgba(16,185,129,0.3));">⚡</div>
+                <div style="margin-bottom:12px;color:var(--success);filter:drop-shadow(0 2px 8px rgba(52,211,153,0.3));"><i data-lucide="zap" size="28"></i></div>
                 <div style="font-weight:700;font-size:15px;margin-bottom:8px;color:var(--text-pri);">Web Worker</div>
                 <p style="font-size:13px;color:var(--text-sec);line-height:1.6">Le traitement s'exécute hors du thread principal. Votre navigateur reste parfaitement réactif.</p>
             </div>
             <div class="feature-card jump-on-hover"
                 style="text-align:left;background:var(--card);border-radius:14px;padding:24px;box-shadow:var(--shadow-card);min-width:200px;flex:1;border:1px solid rgba(255,255,255,0.05);transition: transform 0.3s ease;">
-                <div style="font-size:28px;margin-bottom:12px;filter:drop-shadow(0 2px 8px rgba(245,158,11,0.3));">🔒</div>
+                <div style="margin-bottom:12px;color:var(--accent);filter:drop-shadow(0 2px 8px rgba(244,114,182,0.3));"><i data-lucide="shield-check" size="28"></i></div>
                 <div style="font-weight:700;font-size:15px;margin-bottom:8px;color:var(--text-pri);">100% Privé</div>
                 <p style="font-size:13px;color:var(--text-sec);line-height:1.6">Vos images ne quittent jamais votre appareil. Zéro requête serveur pour les données d'image.</p>
             </div>
@@ -189,6 +156,36 @@ Supprimez les filigranes Gemini.<br><em>Instantanément. Sans perte de qualité.
 
     <!-- ── Application (module ES) ── -->
     <script type="module" src="app.js"></script>
+
+    <!-- ── Bottom Mobile Nav ── -->
+    <div class="bottom-nav mobile-only">
+        <a href="#" class="nav-item active" onclick="resetApp(); return false;">
+            <i data-lucide="home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="#" class="nav-item action-btn" onclick="document.getElementById('file-input').click(); return false;">
+            <div class="action-btn-inner">
+                <i data-lucide="upload-cloud"></i>
+            </div>
+        </a>
+        <a href="#how" class="nav-item">
+            <i data-lucide="info"></i>
+            <span>Info</span>
+        </a>
+    </div>
+
+    <!-- Init Icones -->
+    <script>
+      lucide.createIcons();
+      // Manage mobile nav active state
+      document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+          if (!this.hasAttribute('onclick') || this.getAttribute('onclick').includes('file-input')) return;
+          document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    </script>
 
     <!--
     Clear AI Watermark — MIT License

@@ -141,6 +141,7 @@ function handleFiles(files) {
         processNextItems();
     }
     SoundEngine.drop();
+    setTimeout(() => { if(window.lucide) window.lucide.createIcons(); }, 10);
 }
 
 // ── Interface image unique ──────────────────────────────────────────────────
@@ -157,7 +158,7 @@ function renderSinglePlaceholder(item) {
         </div>
         <div class="ba-divider" id="ba-divider" style="display:none">
           <div class="ba-handle">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18-6-6 6-6"/><path d="m15 18 6-6-6-6"/></svg>
+            <i data-lucide="move-horizontal" size="20" color="#000"></i>
           </div>
         </div>
         <span class="ba-label ba-label-before" id="ba-lb" style="display:none">AVANT</span>
@@ -167,7 +168,7 @@ function renderSinglePlaceholder(item) {
       <div class="single-actions" id="single-actions" style="display:none">
         <button class="btn-secondary" onclick="resetApp()">Traiter une autre</button>
         <button class="btn-primary" id="dl-btn">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <i data-lucide="download" size="16"></i>
           Télécharger PNG
         </button>
       </div>`;
@@ -254,7 +255,7 @@ function renderBatchGrid() {
       <div class="batch-zip-row" id="zip-row" style="display:none">
         <button class="btn-secondary" onclick="resetApp()">Traiter plus</button>
         <button class="btn-accent" id="zip-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <i data-lucide="package" size="18"></i>
           Tout télécharger en ZIP
         </button>
       </div>`;
@@ -411,6 +412,10 @@ window.resetApp = function () {
     resultSection.classList.remove('visible');
     resultSection.innerHTML = '';
     heroSection.style.display = '';
+    
+    // Reset mobile nav
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
+    document.querySelector('.bottom-nav .nav-item').classList.add('active'); // Select Home
 };
 
 // ── Système Sonore (Web Audio API) ───────────────────────────────────────────

@@ -12,26 +12,26 @@
 }
 
 :root {
-  --bg: #0f172a;
-  --bg-mid: #1e293b;
-  --card: rgba(30, 41, 59, 0.4);
+  --primary: #7c3aed;
+  --primary-light: #a78bfa;
+  --secondary: #06b6d4;
+  --accent: #f472b6;
+  --bg: #0a0a0f;
+  --bg-mid: #14141d;
+  --bg-card: rgba(15, 15, 25, 0.6);
   --card-border: rgba(255, 255, 255, 0.08);
   --border: rgba(255, 255, 255, 0.12);
   --text-pri: #f8fafc;
   --text-sec: #94a3b8;
   --text-muted: #64748b;
-  --accent: #3b82f6;
-  --accent-2: #8b5cf6;
-  --accent-3: #06b6d4;
-  --accent-dim: rgba(59, 130, 246, 0.12);
-  --accent-glow: rgba(59, 130, 246, 0.4);
   --pill-dark: #1e293b;
   --pill-light: rgba(255, 255, 255, 0.05);
-  --red: #ef4444;
-  --green: #10b981;
-  --amber: #f59e0b;
+  --success: #34d399;
+  --error: #fb7185;
+  --amber: #fbbf24;
   --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
   --shadow-drop: 0 12px 48px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  --shadow-primary: 0 4px 16px rgba(124, 58, 237, 0.4);
   --shadow-btn: 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
   --radius-card: 24px;
   --radius-btn: 999px;
@@ -57,8 +57,8 @@ body::before {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 85% 30%, rgba(244, 114, 182, 0.08) 0%, transparent 50%),
     radial-gradient(circle at 50% -20%, rgba(6, 182, 212, 0.12) 0%, transparent 60%);
   transition: background 0.5s ease;
 }
@@ -105,28 +105,38 @@ nav {
 .logo-mark {
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, var(--accent), #60a5fa);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 0 16px var(--accent-glow);
+  box-shadow: var(--shadow-primary);
 }
 
-.logo-mark svg {
-  width: 16px;
-  height: 16px;
+.logo-mark svg, .logo-mark i {
+  width: 18px;
+  height: 18px;
   color: #fff;
 }
 
 .nav-links {
   display: flex;
-  gap: 6px;
+  gap: 16px;
   align-items: center;
 }
 
+.desktop-only {
+  display: flex;
+}
+.mobile-only {
+  display: none;
+}
+
 .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 6px 14px;
   border-radius: var(--radius-btn);
   font-size: 13.5px;
@@ -136,8 +146,17 @@ nav {
   transition: background .15s, color .15s;
 }
 
+.nav-link i, .nav-link svg {
+  color: var(--text-muted);
+  transition: color .15s;
+}
+
 .nav-link:hover {
-  background: rgba(255, 255, 255, .6);
+  background: rgba(255, 255, 255, .1);
+  color: var(--text-pri);
+}
+
+.nav-link:hover i {
   color: var(--text-pri);
 }
 
@@ -213,7 +232,7 @@ h1 {
 
 h1 em {
   font-style: normal;
-  background: linear-gradient(135deg, var(--accent), var(--accent-3));
+  background: linear-gradient(135deg, var(--primary-light), var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -232,7 +251,7 @@ h1 em {
 #upload-area {
   width: 100%;
   max-width: 640px;
-  background: var(--card);
+  background: var(--bg-card);
   border-radius: 24px;
   border: 2px dashed rgba(255, 255, 255, 0.15);
   box-shadow: var(--shadow-drop);
@@ -255,16 +274,16 @@ h1 em {
   left: 10%;
   right: 10%;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
   opacity: 0.5;
   transition: opacity 0.3s;
 }
 
 #upload-area:hover {
-  border-color: rgba(59, 130, 246, 0.5);
-  box-shadow: 0 24px 80px rgba(59, 130, 246, 0.15), 0 0 0 2px rgba(59, 130, 246, 0.2);
+  border-color: rgba(124, 58, 237, 0.5);
+  box-shadow: 0 24px 80px rgba(124, 58, 237, 0.15), 0 0 0 2px rgba(124, 58, 237, 0.2);
   transform: translateY(-4px);
-  background: rgba(30, 41, 59, 0.7);
+  background: rgba(15, 15, 25, 0.7);
 }
 
 #upload-area:hover::before {
@@ -272,9 +291,9 @@ h1 em {
 }
 
 #upload-area.drag-over {
-  border-color: var(--accent);
-  box-shadow: 0 24px 80px rgba(59, 130, 246, 0.25), 0 0 0 2px var(--accent);
-  background: rgba(59, 130, 246, 0.08);
+  border-color: var(--primary);
+  box-shadow: 0 24px 80px rgba(124, 58, 237, 0.25), 0 0 0 2px var(--primary);
+  background: rgba(124, 58, 237, 0.08);
   transform: translateY(-2px) scale(1.02);
 }
 
@@ -282,12 +301,12 @@ h1 em {
   width: 64px;
   height: 64px;
   border-radius: 18px;
-  background: var(--accent-dim);
-  border: 1px solid rgba(59, 130, 246, 0.2);
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
   transition: transform 0.3s;
 }
 
@@ -295,10 +314,8 @@ h1 em {
   transform: scale(1.05) translateY(-2px);
 }
 
-.drop-icon svg {
-  width: 28px;
-  height: 28px;
-  color: var(--accent);
+.drop-icon svg, .drop-icon i {
+  color: var(--secondary);
 }
 
 .drop-title {
@@ -404,13 +421,13 @@ button, .btn-primary, .btn-secondary, .btn-accent {
   gap: 8px;
   padding: 12px 28px;
   border-radius: var(--radius-btn);
-  background: linear-gradient(135deg, var(--accent), #60a5fa);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: #fff;
   font-size: 15px;
   font-weight: 700;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 16px var(--accent-glow);
+  box-shadow: var(--shadow-primary);
   letter-spacing: -0.2px;
   transition: all 0.2s ease;
   font-family: 'Inter', sans-serif;
@@ -418,7 +435,7 @@ button, .btn-primary, .btn-secondary, .btn-accent {
 
 .btn-accent:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.6);
   filter: brightness(1.1);
 }
 
@@ -440,10 +457,8 @@ button, .btn-primary, .btn-secondary, .btn-accent {
   font-weight: 500;
 }
 
-.trust-item svg {
-  width: 14px;
-  height: 14px;
-  color: var(--accent);
+.trust-item svg, .trust-item i {
+  color: var(--success);
   flex-shrink: 0;
 }
 
@@ -662,7 +677,7 @@ button, .btn-primary, .btn-secondary, .btn-accent {
 
 .overall-progress-bar {
   height: 100%;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
   border-radius: 999px;
   transition: width .3s;
 }
@@ -725,15 +740,15 @@ button, .btn-primary, .btn-secondary, .btn-accent {
 }
 
 .status-processing {
-  color: var(--accent);
+  color: var(--secondary);
 }
 
 .status-done {
-  color: var(--green);
+  color: var(--success);
 }
 
 .status-error {
-  color: var(--red);
+  color: var(--error);
 }
 
 .batch-item-dl {
@@ -775,7 +790,7 @@ button, .btn-primary, .btn-secondary, .btn-accent {
   width: 24px;
   height: 24px;
   border: 2px solid var(--border);
-  border-top-color: var(--accent);
+  border-top-color: var(--secondary);
   border-radius: 50%;
   animation: spin .8s linear infinite;
 }
@@ -838,18 +853,85 @@ footer .sep {
   color: var(--border);
 }
 
-/* ── Adaptatif ── */
-@media (max-width: 600px) {
-  nav {
-    padding: 0 16px;
-  }
+/* ── Bottom Nav Mobile ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom);
+}
 
-  #upload-area {
-    padding: 32px 20px 28px;
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 500;
+  gap: 4px;
+  width: 60px;
+  transition: color 0.2s;
+}
+
+.nav-item i {
+  color: inherit;
+  transition: transform 0.2s;
+}
+
+.nav-item.active {
+  color: var(--primary-light);
+}
+
+.nav-item:hover {
+  color: var(--text-pri);
+}
+
+.action-btn {
+  transform: translateY(-20px);
+}
+
+.action-btn-inner {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: var(--shadow-primary), 0 0 0 6px var(--bg);
+}
+
+/* ── Adaptatif ── */
+@media (max-width: 768px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: flex !important; }
+
+  nav {
+    justify-content: center;
+    border-bottom: none;
+    background: transparent;
+    padding-top: 16px;
+  }
+  
+  main {
+    padding: 80px 20px 100px;
   }
 
   h1 {
-    letter-spacing: -2px;
+    font-size: clamp(32px, 8vw, 40px);
+    letter-spacing: -1.5px;
   }
 
   .stat-row {
@@ -864,6 +946,18 @@ footer .sep {
   .batch-grid {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
+  
+  .toast {
+    bottom: 90px;
+  }
+  
+  footer {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-only { display: none !important; }
 }
 
 
