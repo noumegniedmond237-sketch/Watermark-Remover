@@ -1,11 +1,11 @@
 /**
- * Adaptive watermark detector
- * Based on upstream GargantuaX/gemini-watermark-remover (MIT).
- * ADDED: early-exit when confidence >= EARLY_EXIT_THRESHOLD to skip exhaustive scan.
+ * Détecteur adaptatif de filigranes
+ * Basé sur l'amont GargantuaX/gemini-watermark-remover (MIT).
+ * AJOUTÉ : sortie anticipée lorsque la confiance >= SEUIL_SORTIE_ANTICIPEE pour éviter le balayage exhaustif.
  */
 
 const DEFAULT_THRESHOLD = 0.35;
-const EARLY_EXIT_THRESHOLD = 0.90; // ClearDrop: stop scanning early when confident
+const EARLY_EXIT_THRESHOLD = 0.90; // ClearDrop : arrêter le balayage tôt quand on est confiant
 const EPSILON = 1e-8;
 
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
@@ -210,8 +210,8 @@ export function shouldAttemptAdaptiveFallback({ processedImageData, alphaMap, po
 }
 
 /**
- * Detect watermark region adaptively.
- * EARLY-EXIT: if the default candidate scores >= EARLY_EXIT_THRESHOLD, skip the full scan.
+ * Détecte la région du filigrane de manière adaptative.
+ * SORTIE ANTICIPÉE : si le candidat par défaut obtient un score >= SEUIL_SORTIE_ANTICIPEE, on ignore le balayage complet.
  */
 export function detectAdaptiveWatermarkRegion({ imageData, alpha96, defaultConfig, threshold = DEFAULT_THRESHOLD }) {
     const { width, height } = imageData;
@@ -230,9 +230,9 @@ export function detectAdaptiveWatermarkRegion({ imageData, alpha96, defaultConfi
     const defaultTemplate = getTemplate(templateCache, alpha96, baseSize);
     const defaultScore = scoreCandidate(context, defaultTemplate.alpha, defaultTemplate.grad, defaultCandidate);
 
-    // ── EARLY EXIT ──────────────────────────────────────────────────────────────
-    // If the default (standard) position is already a very high-confidence match,
-    // skip the entire exhaustive multi-scale scan. Saves 30–60% processing time.
+    // ── SORTIE ANTICIPÉE ──────────────────────────────────────────────────────────
+    // Si la position par défaut (standard) est déjà une correspondance de très haute confiance,
+    // ignorer le balayage multi-échelle exhaustif. Économise 30 à 60% du temps de traitement.
     if (defaultScore && defaultScore.confidence >= EARLY_EXIT_THRESHOLD) {
         return {
             found: true,
@@ -243,9 +243,9 @@ export function detectAdaptiveWatermarkRegion({ imageData, alpha96, defaultConfi
             region: defaultCandidate,
         };
     }
-    // ────────────────────────────────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────────────────────────
 
-    // Upstream quick-exit (threshold + 0.08)
+    // Sortie rapide de l'amont (seuil + 0.08)
     if (defaultScore && defaultScore.confidence >= threshold + 0.08) {
         return {
             found: true,
@@ -257,7 +257,7 @@ export function detectAdaptiveWatermarkRegion({ imageData, alpha96, defaultConfi
         };
     }
 
-    // Full multi-scale coarse scan
+    // Balayage grossier multi-échelle complet
     const minSize = clamp(Math.round(baseSize * 0.65), 24, 144);
     const maxSize = clamp(Math.min(Math.round(baseSize * 2.8), Math.floor(Math.min(width, height) * 0.4)), minSize, 192);
     const scaleList = createScaleList(minSize, maxSize);

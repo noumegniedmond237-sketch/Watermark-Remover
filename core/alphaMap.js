@@ -1,7 +1,7 @@
 /**
- * Alpha Map calculator
- * Calculates alpha map from captured background image.
- * Unchanged from upstream GargantuaX/gemini-watermark-remover (MIT).
+ * Calculateur de carte alpha
+ * Calcule la carte alpha à partir de l'image de fond capturée.
+ * Inchangé par rapport à l'amont GargantuaX/gemini-watermark-remover (MIT).
  */
 export function calculateAlphaMap(bgCaptureImageData) {
     const { width, height, data } = bgCaptureImageData;

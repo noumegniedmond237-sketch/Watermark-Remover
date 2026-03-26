@@ -1,6 +1,6 @@
 /**
- * WatermarkEngine — orchestrates detection, alpha-map loading, and removal.
- * Based on GargantuaX/gemini-watermark-remover (MIT). Early-exit wired through adaptiveDetector.
+ * WatermarkEngine — orchestre la détection, le chargement des cartes alpha et la suppression.
+ * Basé sur GargantuaX/gemini-watermark-remover (MIT). Sortie anticipée branchée via adaptiveDetector.
  */
 
 import { calculateAlphaMap } from './alphaMap.js';
@@ -19,8 +19,8 @@ import {
     resolveInitialStandardConfig,
 } from './watermarkConfig.js';
 
-// Encode PNGs as base64 literals at build time – zero network request for assets.
-// We load them via fetch from /assets/ in the Web Worker context.
+// Encoder les PNG en littéraux base64 au moment de la construction — zéro requête réseau pour les ressources.
+// Nous les chargeons via fetch depuis /assets/ dans le contexte du Web Worker.
 export const BG_48_URL = new URL('../assets/bg_48.png', import.meta.url).href;
 export const BG_96_URL = new URL('../assets/bg_96.png', import.meta.url).href;
 
@@ -44,19 +44,19 @@ function createRuntimeCanvas(width, height) {
         canvas.width = width; canvas.height = height;
         return canvas;
     }
-    throw new Error('Canvas runtime not available');
+    throw new Error('Moteur Canvas non disponible');
 }
 
 function getCanvasContext2D(canvas) {
     const ctx = canvas.getContext('2d', { willReadFrequently: true });
-    if (!ctx) throw new Error('Failed to get 2D canvas context');
+    if (!ctx) throw new Error('Échec de l\'obtention du contexte Canvas 2D');
     return ctx;
 }
 
 async function loadBackgroundCapture(url) {
     if (typeof createImageBitmap !== 'undefined' && typeof fetch !== 'undefined') {
         const response = await fetch(url);
-        if (!response.ok) throw new Error(`Failed to load bg capture: ${response.status}`);
+        if (!response.ok) throw new Error(`Échec du chargement de la capture de fond : ${response.status}`);
         const blob = await response.blob();
         return createImageBitmap(blob);
     }
@@ -68,7 +68,7 @@ async function loadBackgroundCapture(url) {
             img.src = url;
         });
     }
-    throw new Error('No image loader available');
+    throw new Error('Aucun chargeur d\'image disponible');
 }
 
 function cloneImageData(imageData) {
@@ -181,7 +181,7 @@ function recalibrateAlphaStrength({ originalImageData, alphaMap, position, origi
     return { imageData: bestImageData, alphaGain: bestGain, processedSpatialScore: bestScore, suppressionGain: originalSpatialScore - bestScore };
 }
 
-/** Main engine class */
+/** Classe principale du moteur */
 export class WatermarkEngine {
     constructor(bgCaptures) {
         this.bgCaptures = bgCaptures;
@@ -217,7 +217,7 @@ export class WatermarkEngine {
     }
 
     async processImage(imageBitmap) {
-        // Draw bitmap to an OffscreenCanvas to get ImageData
+        // Dessiner le bitmap sur un OffscreenCanvas pour obtenir les ImageData
         const canvas = createRuntimeCanvas(imageBitmap.width, imageBitmap.height);
         const ctx = getCanvasContext2D(canvas);
         ctx.drawImage(imageBitmap, 0, 0);
@@ -225,16 +225,16 @@ export class WatermarkEngine {
 
         const { width, height } = imageData;
 
-        // Load both alpha maps for config resolution
+        // Charger les deux cartes alpha pour la résolution de la configuration
         const [alpha48, alpha96] = await Promise.all([this.getAlphaMap(48), this.getAlphaMap(96)]);
 
-        // Determine standard config
+        // Déterminer la configuration standard
         const defaultConfig = detectWatermarkConfig(width, height);
         const config = resolveInitialStandardConfig({ imageData, defaultConfig, alpha48, alpha96 });
         const position = calculateWatermarkPosition(width, height, config);
         const alphaMap = config.logoSize === 96 ? alpha96 : alpha48;
 
-        // Adaptive detection (early-exit wired in adaptiveDetector.js)
+        // Détection adaptative (sortie anticipée branchée dans adaptiveDetector.js)
         const adaptiveResult = detectAdaptiveWatermarkRegion({ imageData, alpha96, defaultConfig: config });
         const finalPosition = adaptiveResult.found
             ? { x: adaptiveResult.region.x, y: adaptiveResult.region.y, width: adaptiveResult.region.size, height: adaptiveResult.region.size }
@@ -243,13 +243,13 @@ export class WatermarkEngine {
             ? await this.getAlphaMap(adaptiveResult.region.size)
             : alphaMap;
 
-        // Measure baseline score before removal
+        // Mesurer le score de base avant la suppression
         const originalSpatialScore = computeRegionSpatialCorrelation({
             imageData, alphaMap: finalAlphaMap,
             region: { x: finalPosition.x, y: finalPosition.y, size: finalPosition.width }
         });
 
-        // Template warp refinement
+        // Raffinement par déformation de modèle
         const baselineGradientScore = computeRegionGradientCorrelation({
             imageData, alphaMap: finalAlphaMap,
             region: { x: finalPosition.x, y: finalPosition.y, size: finalPosition.width }
@@ -261,7 +261,7 @@ export class WatermarkEngine {
         const bestAlphaMap = warpResult ? warpResult.alphaMap : finalAlphaMap;
         const bestShift = warpResult ? warpResult.shift : { dx: 0, dy: 0, scale: 1 };
 
-        // First-pass removal
+        // Première passe de suppression
         const processed = cloneImageData(imageData);
         removeWatermark(processed, bestAlphaMap, finalPosition);
 
@@ -275,7 +275,7 @@ export class WatermarkEngine {
         let result = processed;
         let finalAlphaGain = 1;
 
-        // Recalibrate alpha strength if needed
+        // Recalibrer la force alpha si nécessaire
         if (shouldRecalibrateAlphaStrength({ originalScore: originalSpatialScore, processedScore: processedSpatialScore, suppressionGain })) {
             const recalibrated = recalibrateAlphaStrength({
                 originalImageData: imageData, alphaMap: bestAlphaMap, position: finalPosition,
@@ -287,7 +287,7 @@ export class WatermarkEngine {
             }
         }
 
-        // Subpixel outline refinement
+        // Raffinement subpixel du contour
         if (finalAlphaGain >= OUTLINE_REFINEMENT_THRESHOLD) {
             const refined = refineSubpixelOutline({
                 originalImageData: imageData, alphaMap: bestAlphaMap, position: finalPosition,
@@ -298,10 +298,10 @@ export class WatermarkEngine {
             if (refined) result = refined.imageData;
         }
 
-        // Confidence score for UI
+        // Score de confiance pour l'interface utilisateur
         const confidence = adaptiveResult.found ? adaptiveResult.confidence : Math.max(0, Math.min(1, originalSpatialScore));
 
-        // Write result back to canvas and return blob
+        // Écrire le résultat sur le canvas et renvoyer le blob
         ctx.putImageData(result, 0, 0);
         const blob = await canvas.convertToBlob({ type: 'image/png' });
 

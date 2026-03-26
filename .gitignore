@@ -1,4 +1,4 @@
-# ignore OS/editor junk
+# ignorer les fichiers systeme/editeurs
 .DS_Store
 .DS_Store?
 ._*
@@ -10,9 +10,9 @@ Thumbs.db
 .vscode/
 .idea/
 
-# ignore dev artifacts
+# ignorer les artefacts de developpement
 node_modules/
 dist/
 
-# mockup files (not needed in public repo)
+# fichiers maquette (non necessaires dans le depot public)
 mockup_*.html

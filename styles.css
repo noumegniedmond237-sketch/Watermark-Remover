@@ -1,6 +1,6 @@
 /* ─────────────────────────────────────────────────────────────
    ClearDrop — styles.css
-   SideShift-inspired design system
+   Système de design inspiré de SideShift
    ───────────────────────────────────────────────────────────── */
 
 *,
@@ -34,7 +34,7 @@
   --radius-btn: 999px;
 }
 
-/* ── Fonts ── */
+/* ── Polices ── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap');
 
 html,
@@ -46,7 +46,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ambient edge glow */
+/* lueur ambiante sur les bords */
 body::before {
   content: '';
   position: fixed;
@@ -59,7 +59,7 @@ body::before {
     radial-gradient(circle at 50% -20%, rgba(59, 130, 246, 0.15) 0%, transparent 60%);
 }
 
-/* dot grid */
+/* grille de points */
 body::after {
   content: '';
   position: fixed;
@@ -70,7 +70,7 @@ body::after {
   background-size: 32px 32px;
 }
 
-/* ── Nav ── */
+/* ── Navigation ── */
 nav {
   position: fixed;
   top: 0;
@@ -155,7 +155,7 @@ nav {
   opacity: .88;
 }
 
-/* ── Layout ── */
+/* ── Mise en page ── */
 main {
   position: relative;
   z-index: 1;
@@ -196,7 +196,7 @@ main {
   text-transform: uppercase;
 }
 
-/* ── Headline ── */
+/* ── Titre principal ── */
 h1 {
   font-size: clamp(40px, 6vw, 72px);
   font-weight: 900;
@@ -221,7 +221,7 @@ h1 em {
   margin-bottom: 44px;
 }
 
-/* ── Upload card ── */
+/* ── Carte de téléversement ── */
 #upload-area {
   width: 100%;
   max-width: 640px;
@@ -308,7 +308,7 @@ h1 em {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* ── Buttons ── */
+/* ── Boutons ── */
 .btn-row {
   display: flex;
   gap: 12px;
@@ -396,7 +396,7 @@ h1 em {
   filter: brightness(1.1);
 }
 
-/* ── Trust row ── */
+/* ── Ligne de confiance ── */
 .trust-row {
   display: flex;
   gap: 24px;
@@ -421,7 +421,7 @@ h1 em {
   flex-shrink: 0;
 }
 
-/* ── Stat cards ── */
+/* ── Cartes de statistiques ── */
 .stat-row {
   display: flex;
   gap: 16px;
@@ -462,7 +462,7 @@ h1 em {
   font-weight: 500;
 }
 
-/* ── Result section ── */
+/* ── Section des résultats ── */
 #result-section {
   display: none;
   position: relative;
@@ -515,7 +515,7 @@ h1 em {
   border: 1px solid rgba(229, 62, 62, .25);
 }
 
-/* ── Before/After slider (single) ── */
+/* ── Curseur avant/après (image unique) ── */
 .before-after-wrap {
   position: relative;
   overflow: hidden;
@@ -615,7 +615,7 @@ h1 em {
   justify-content: flex-end;
 }
 
-/* ── Batch queue ── */
+/* ── File de lots ── */
 .batch-header {
   display: flex;
   align-items: center;
@@ -734,7 +734,7 @@ h1 em {
   cursor: not-allowed;
 }
 
-/* processing spinner overlay */
+/* indicateur de chargement par-dessus */
 .batch-item-spinner {
   position: absolute;
   inset: 0;
@@ -767,7 +767,7 @@ h1 em {
   margin-top: 24px;
 }
 
-/* ── Toast ── */
+/* ── Notification ── */
 .toast {
   position: fixed;
   bottom: 80px;
@@ -790,7 +790,7 @@ h1 em {
   opacity: 1;
 }
 
-/* ── Footer ── */
+/* ── Pied de page ── */
 footer {
   position: relative;
   z-index: 1;
@@ -812,7 +812,7 @@ footer .sep {
   color: var(--border);
 }
 
-/* ── Responsive ── */
+/* ── Adaptatif ── */
 @media (max-width: 600px) {
   nav {
     padding: 0 16px;
@@ -839,7 +839,7 @@ footer .sep {
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 }
-/* ── Roaming Cat ── */
+/* ── Chat errant ── */
 #roaming-cat {
   position: fixed;
   bottom: 12px;
@@ -868,7 +868,7 @@ footer .sep {
   animation: cat-bounce 0.4s ease-in-out infinite;
 }
 
-/* ── Custom Animations ── */
+/* ── Animations personnalisées ── */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -885,7 +885,7 @@ footer .sep {
   animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Staggered animation delays for elements inside hero */
+/* Délais d'animation décalés pour les éléments de l'accueil */
 .stagger-1 { animation-delay: 0.1s; opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .stagger-2 { animation-delay: 0.2s; opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .stagger-3 { animation-delay: 0.3s; opacity: 0; animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
@@ -911,7 +911,7 @@ footer .sep {
   animation: pulseBounce 3s ease-in-out infinite;
 }
 
-/* Make result section slide up on appear */
+/* Faire glisser la section des résultats vers le haut à l'apparition */
 #result-section.visible {
   display: block;
   animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -922,7 +922,7 @@ footer .sep {
   100% { opacity: 1; transform: scale(1); }
 }
 
-/* ── Full Cat Body Overrides ── */
+/* ── Corps complet du chat — redéfinitions ── */
 #roaming-cat {
   width: 64px;
   height: 32px;

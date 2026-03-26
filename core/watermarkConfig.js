@@ -1,6 +1,6 @@
 /**
- * Watermark size/position detection.
- * Unchanged from upstream GargantuaX/gemini-watermark-remover (MIT).
+ * Détection de la taille/position du filigrane.
+ * Inchangé par rapport à l'amont GargantuaX/gemini-watermark-remover (MIT).
  */
 import { computeRegionSpatialCorrelation } from './adaptiveDetector.js';
 

@@ -1,8 +1,8 @@
 /**
- * Reverse alpha blending — core watermark removal formula.
- * Gemini composites: watermarked = α × logo + (1−α) × original
- * We reverse:        original    = (watermarked − α × logo) / (1−α)
- * Unchanged from upstream GargantuaX/gemini-watermark-remover (MIT).
+ * Mélange alpha inversé — formule principale de suppression de filigrane.
+ * Gemini compose : watermarked = α × logo + (1−α) × original
+ * Nous inversons : original = (watermarked − α × logo) / (1−α)
+ * Inchangé par rapport à l'amont GargantuaX/gemini-watermark-remover (MIT).
  */
 
 const ALPHA_NOISE_FLOOR = 3 / 255;
@@ -11,7 +11,7 @@ const MAX_ALPHA = 0.99;
 const LOGO_VALUE = 255;
 
 /**
- * @param {ImageData}   imageData  – modified in place
+ * @param {ImageData}   imageData  – modifié en place
  * @param {Float32Array} alphaMap
  * @param {{x,y,width,height}} position
  * @param {{alphaGain?: number}} [options]

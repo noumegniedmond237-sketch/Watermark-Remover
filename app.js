@@ -1,19 +1,19 @@
 /**
  * ClearDrop — app.js
- * Main UI logic: drag-drop, worker pool, single image, batch queue, lazy ZIP
+ * Logique principale de l'interface : glisser-déposer, pool de workers, image unique, file de lots, ZIP différé
  */
 
-// ── Asset URLs (relative to this file's location) ────────────────────────────
+// ── URLs des ressources (relatives à l'emplacement de ce fichier) ───────────
 const BG_48_URL = new URL('./assets/bg_48.png', location.href).href;
 const BG_96_URL = new URL('./assets/bg_96.png', location.href).href;
 const WORKER_URL = new URL('./workers/watermarkWorker.js', location.href).href;
 
-// ── Config ───────────────────────────────────────────────────────────────────
+// ── Configuration ───────────────────────────────────────────────────────────
 const MAX_BATCH = 50;
 const POOL_SIZE = Math.min(navigator.hardwareConcurrency || 2, 4);
 const ACCEPT_MIME = ['image/jpeg', 'image/png', 'image/webp'];
 
-// ── State ────────────────────────────────────────────────────────────────────
+// ── État ────────────────────────────────────────────────────────────────────
 let queue = [];   // { id, file, objectUrl, status, blob, confidence }
 let processing = 0;
 let completed = 0;
@@ -21,7 +21,7 @@ let singleMode = false;
 let workerQueue = [];
 let pendingResolvers = new Map();
 
-// ── Worker pool ───────────────────────────────────────────────────────────────
+// ── Pool de workers ─────────────────────────────────────────────────────────
 const workers = Array.from({ length: POOL_SIZE }, () => {
     const w = new Worker(WORKER_URL, { type: 'module' });
     w.busy = false;
@@ -62,8 +62,8 @@ function drainQueue() {
 
 function onWorkerMessage(event) {
     const { id, blob, confidence, position, ok, error } = event.data;
-    const worker = workers.find(w => w.busy && true); // any busy one (message is from it)
-    // Find which worker sent this
+    const worker = workers.find(w => w.busy && true); // un worker occupé (le message vient de lui)
+    // Trouver quel worker a envoyé ce message
     const senderWorker = workers.find(w => w === event.target);
     if (senderWorker) senderWorker.busy = false;
 
@@ -74,20 +74,20 @@ function onWorkerMessage(event) {
     if (ok) {
         entry.resolve({ blob, confidence, position });
     } else {
-        entry.reject(new Error(error || 'Processing failed'));
+        entry.reject(new Error(error || 'Échec du traitement'));
     }
 
     drainQueue();
 }
 
-// ── DOM refs ─────────────────────────────────────────────────────────────────
+// ── Références DOM ──────────────────────────────────────────────────────────
 const uploadArea = document.getElementById('upload-area');
 const fileInput = document.getElementById('file-input');
 const resultSection = document.getElementById('result-section');
 const heroSection = document.getElementById('hero-section');
 const toastEl = document.getElementById('toast');
 
-// ── Drag & Drop ───────────────────────────────────────────────────────────────
+// ── Glisser-Déposer ─────────────────────────────────────────────────────────
 uploadArea.addEventListener('click', () => fileInput.click());
 
 uploadArea.addEventListener('dragover', e => {
@@ -116,7 +116,7 @@ document.addEventListener('paste', e => {
     if (files.length > 0) handleFiles(files);
 });
 
-// ── File handling ─────────────────────────────────────────────────────────────
+// ── Gestion des fichiers ────────────────────────────────────────────────────
 function handleFiles(files) {
     const valid = files.filter(f => ACCEPT_MIME.includes(f.type)).slice(0, MAX_BATCH);
     if (valid.length === 0) { showToast('Type de fichier non supporté. Utilisez JPG, PNG ou WebP.'); return; }
@@ -142,7 +142,7 @@ function handleFiles(files) {
     }
 }
 
-// ── Single image UI ───────────────────────────────────────────────────────────
+// ── Interface image unique ──────────────────────────────────────────────────
 function renderSinglePlaceholder(item) {
     resultSection.innerHTML = `
       <div class="result-header">
@@ -152,7 +152,7 @@ function renderSinglePlaceholder(item) {
       <div class="before-after-wrap" id="ba-wrap">
         <img src="${item.objectUrl}" alt="Original" id="ba-before" style="visibility:hidden">
         <div class="ba-after" id="ba-after-div" style="display:none">
-          <img src="" alt="Cleaned" id="ba-after-img">
+          <img src="" alt="Nettoyé" id="ba-after-img">
         </div>
         <div class="ba-divider" id="ba-divider" style="display:none">
           <div class="ba-handle">
@@ -171,7 +171,7 @@ function renderSinglePlaceholder(item) {
         </button>
       </div>`;
 
-    // Load before image visibly once it's loaded
+    // Charger l'image "avant" une fois qu'elle est prête
     const beforeImg = document.getElementById('ba-before');
     beforeImg.onload = () => { beforeImg.style.visibility = 'visible'; };
 }
@@ -239,7 +239,7 @@ function setupBeforeAfterSlider(wrap, afterDiv, divider) {
     wrap.addEventListener('touchstart', e => update(e.touches[0].clientX), { passive: true });
 }
 
-// ── Batch UI ──────────────────────────────────────────────────────────────────
+// ── Interface par lots ──────────────────────────────────────────────────────
 function renderBatchGrid() {
     resultSection.innerHTML = `
       <div class="result-header">
@@ -325,7 +325,7 @@ function updateBatchItemUI(item) {
                 dlBtn.disabled = false;
                 dlBtn.addEventListener('click', () => downloadBlob(item.blob, sanitizeName(item.file.name)));
             }
-            // Update thumb to show cleaned version
+            // Mettre à jour la vignette pour afficher la version nettoyée
             const thumb = document.querySelector(`#card-${item.id} .batch-thumb`);
             if (thumb && item.blob) thumb.src = URL.createObjectURL(item.blob);
             break;
@@ -351,13 +351,13 @@ function updateOverallProgress() {
     }
 }
 
-// ── Lazy ZIP export ───────────────────────────────────────────────────────────
+// ── Export ZIP différé ──────────────────────────────────────────────────────
 async function downloadZip() {
     const zipBtn = document.getElementById('zip-btn');
     if (zipBtn) { zipBtn.disabled = true; zipBtn.textContent = 'Préparation du ZIP…'; }
 
     try {
-        // lazy-load jszip only when needed
+        // Chargement différé de jszip uniquement quand nécessaire
         const { default: JSZip } = await import('https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm');
         const zip = new JSZip();
 
@@ -378,11 +378,11 @@ async function downloadZip() {
     }
 }
 
-// ── Utilities ─────────────────────────────────────────────────────────────────
+// ── Utilitaires ─────────────────────────────────────────────────────────────
 function sanitizeName(name) {
     const dot = name.lastIndexOf('.');
     const base = dot > 0 ? name.slice(0, dot) : name;
-    return base + '_cleaned.png';
+    return base + '_nettoye.png';
 }
 
 function downloadBlob(blob, filename) {
@@ -400,7 +400,7 @@ function showToast(msg, duration = 3000) {
     setTimeout(() => toastEl.classList.remove('show'), duration);
 }
 
-// ── Reset ─────────────────────────────────────────────────────────────────────
+// ── Réinitialisation ────────────────────────────────────────────────────────
 window.resetApp = function () {
     queue.forEach(item => { if (item.objectUrl) URL.revokeObjectURL(item.objectUrl); });
     queue = []; completed = 0; processing = 0;
@@ -409,13 +409,13 @@ window.resetApp = function () {
     heroSection.style.display = '';
 };
 
-// ── Live Users Fake Metric ────────────────────────────────────────────────────
+// ── Utilisateurs en ligne (fausse métrique) ─────────────────────────────────
 const liveUsersEl = document.getElementById('live-users-count');
 if (liveUsersEl) {
     let currentUsers = 12 + Math.floor(Math.random() * 8);
     liveUsersEl.textContent = currentUsers;
     setInterval(() => {
-        // randomly go up or down by 1, or stay same
+        // varier aléatoirement de -1, 0 ou +1
         const change = Math.floor(Math.random() * 3) - 1;
         currentUsers = Math.max(8, currentUsers + change);
         liveUsersEl.textContent = currentUsers;
