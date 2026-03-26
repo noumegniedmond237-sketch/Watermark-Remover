@@ -78,13 +78,12 @@ netlify deploy --dir . --prod  # Netlify
 
 ## Navigateurs
 
-Chrome 90+ · Firefox 88+ · Safari 14+ · Edge 90+ · iOS Safari 14+ · Android Chrome 90+
-
-## Crédits
-
-Basé sur [GargantuaX/gemini-watermark-remover](https://github.com/GargantuaX/gemini-watermark-remover) et [Kwyshell/GeminiWatermarkTool](https://github.com/dinoBOLT/Gemini-Watermark-Remover) (MIT).
-
-Améliorations : sortie anticipée (+30–60% vitesse), interface repensée, pool de workers parallèles, `createImageBitmap()`, import différé jszip, curseur avant/après.
+![Chrome](https://img.shields.io/badge/Chrome-90+-4285F4?style=flat-square&logo=googlechrome&logoColor=white)
+![Firefox](https://img.shields.io/badge/Firefox-88+-FF7139?style=flat-square&logo=firefox&logoColor=white)
+![Safari](https://img.shields.io/badge/Safari-14+-006CFF?style=flat-square&logo=safari&logoColor=white)
+![Edge](https://img.shields.io/badge/Edge-90+-0078D7?style=flat-square&logo=microsoftedge&logoColor=white)
+![iOS](https://img.shields.io/badge/iOS_Safari-14+-000000?style=flat-square&logo=safari&logoColor=white)
+![Android](https://img.shields.io/badge/Android_Chrome-90+-3DDC84?style=flat-square&logo=googlechrome&logoColor=white)
 
 ## Licence
 
