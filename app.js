@@ -140,6 +140,7 @@ function handleFiles(files) {
         renderBatchGrid();
         processNextItems();
     }
+    SoundEngine.drop();
 }
 
 // ── Interface image unique ──────────────────────────────────────────────────
@@ -183,10 +184,12 @@ async function processItemAsync(item) {
         item.confidence = confidence;
         item.status = 'done';
         renderSingleResult(item);
+        SoundEngine.success();
     } catch (err) {
         item.status = 'error';
         showToast('Erreur lors du traitement de l\'image. Veuillez réessayer.');
         console.error(err);
+        SoundEngine.error();
     }
 }
 
@@ -291,6 +294,7 @@ function processNextItems() {
                 updateBatchItemUI(item);
                 updateOverallProgress();
                 processNextItems();
+                if (completed === queue.length) SoundEngine.success();
             }).catch(err => {
                 item.status = 'error';
                 processing--;
@@ -409,15 +413,120 @@ window.resetApp = function () {
     heroSection.style.display = '';
 };
 
-// ── Utilisateurs en ligne (fausse métrique) ─────────────────────────────────
-const liveUsersEl = document.getElementById('live-users-count');
-if (liveUsersEl) {
-    let currentUsers = 12 + Math.floor(Math.random() * 8);
-    liveUsersEl.textContent = currentUsers;
-    setInterval(() => {
-        // varier aléatoirement de -1, 0 ou +1
-        const change = Math.floor(Math.random() * 3) - 1;
-        currentUsers = Math.max(8, currentUsers + change);
-        liveUsersEl.textContent = currentUsers;
-    }, 4500);
+// ── Système Sonore (Web Audio API) ───────────────────────────────────────────
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+const SoundEngine = {
+  init() {
+    if (!audioCtx) audioCtx = new AudioContext();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  },
+  playTone(freq, type, duration, vol) {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  },
+  click() { this.playTone(600, 'sine', 0.1, 0.05); },
+  success() {
+    this.playTone(523.25, 'sine', 0.1, 0.05); // C5
+    setTimeout(() => this.playTone(659.25, 'sine', 0.2, 0.05), 100); // E5
+  },
+  error() { this.playTone(150, 'sawtooth', 0.3, 0.05); },
+  drop() { this.playTone(300, 'sine', 0.2, 0.05); }
+};
+
+document.addEventListener('click', () => SoundEngine.init(), { once: true });
+
+// ── Particules en Fond ──────────────────────────────────────────────────────
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas ? canvas.getContext('2d') : null;
+let particles = [];
+let mouse = { x: -1000, y: -1000 };
+
+if(canvas) {
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+  window.addEventListener('mouseout', () => { mouse.x = -1000; mouse.y = -1000; });
+
+  class Particle {
+    constructor() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.5;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.radius = Math.random() * 2 + 0.5;
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+      if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+      // Interaction souris
+      const dx = mouse.x - this.x;
+      const dy = mouse.y - this.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 100) {
+        this.x -= dx * 0.02;
+        this.y -= dy * 0.02;
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(59, 130, 246, 0.4)';
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 50; i++) particles.push(new Particle());
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
 }
+
+// ── Intersection Observer pour les animations au scroll ───────────────
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.scroll-fade-in').forEach(el => observer.observe(el));
+
+// ── Boutons Ripple & Clic Sonore ──────────────────────────────────────
+document.addEventListener('click', e => {
+  const btn = e.target.closest('button, .btn-primary, .btn-secondary, .btn-accent');
+  if (btn) {
+    SoundEngine.click();
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    ripple.style.left = `${e.clientX - rect.left}px`;
+    ripple.style.top = `${e.clientY - rect.top}px`;
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  }
+});
